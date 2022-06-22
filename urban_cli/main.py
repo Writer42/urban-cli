@@ -1,17 +1,16 @@
-
+#!./venv/bin/python3
 import json
 import sys
 from typing import Dict, List
-from request import get_definition
+from urban_cli.request import get_definition
+import click
 
 from rich import print
-from rich.console import Console
 from rich.panel import Panel
 from rich.console import Group
 from rich.text import Text
 from rich.padding import Padding
 
-console = Console()
 
 
 def clean_api_text(string: str) -> str:
@@ -40,9 +39,12 @@ class Card:
         return card
 
 
-if __name__ == "__main__":
-    print_number = 3
-    urban_response = get_definition(input())
+@click.command()
+@click.argument('query')
+@click.option("--count",'-c',default=3,help='Number of search results')
+def cli(query, count):
+    print_number = count
+    urban_response = get_definition(query)
     st = json.loads(urban_response.text)
     cards: List[Card] = []
     with open("resp.json", "w") as f:
@@ -59,4 +61,5 @@ if __name__ == "__main__":
             except IndexError:
                 break
 
-        json.dump(st, f, indent=2)
+# if __name__ == "__main__":
+#     search()

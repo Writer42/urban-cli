@@ -1,0 +1,2 @@
+[console_scripts]
+ucli = urban_cli.main:cli
